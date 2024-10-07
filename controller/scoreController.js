@@ -21,7 +21,11 @@ const submitEntry = (req, res) => {
     name: name.charAt(0).toUpperCase() + name.slice(1), // Make the first letter capital
     word
   };
-  if (isAlphabetic(lowercaseWord) && isPalindrome(lowercaseWord)) {
+  if (
+    isAlphabetic(lowercaseWord) &&
+    isPalindrome(lowercaseWord) &&
+    lowercaseWord.length > 1
+  ) {
     newEntryScore.points = lowercaseWord.length;
   } else {
     newEntryScore.points = 0;
