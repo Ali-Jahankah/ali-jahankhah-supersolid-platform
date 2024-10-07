@@ -1,22 +1,25 @@
-var express = require('express');
+const express = require('express');
+//Using dotenv to be able to use env vars
+require('dotenv').config();
+const path = require('path');
+const scoreRoutes = require('./routes/scoreRoutes');
 
-var app = express();
+const bodyParser = require('body-parser');
+
+const app = express();
 
 app.use(express.static(__dirname));
+//Parse request body for the post requests
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', function(req, res) {
-	res.render('index.html');
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
-
-app.get('/api/getScores', (req, res) => {
-	throw new Error('not implemented');
-});
-
-app.post('/api/submitEntry', (req, res) => {
-	throw new Error('not implemented');
-});
-
-var port = 3000;
-app.listen(port, function() {
-	console.log('Server', process.pid, 'listening on port', port);
+//Reafactore the routes and redirecting requests starting with '/api' to scoreRoutes file
+app.use('/api', scoreRoutes);
+//Adding Dynamic port in case of deployment
+const port = process.env.PORT || 3000;
+app.listen(port, function () {
+  console.log('Server', process.pid, 'listening on port', port);
 });
